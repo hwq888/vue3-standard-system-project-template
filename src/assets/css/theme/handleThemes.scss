@@ -1,0 +1,48 @@
+@import './themes.scss';
+@import './element-plus/theme-chalk-blueblack.scss';
+// @import './element-plus/theme-chalk-bluewhite.scss';
+@import './element-plus/theme-chalk-greenblack.scss';
+// @import './element-plus/theme-chalk-greenwhite.scss';
+@import './element-plus/theme-chalk-purpleblack.scss';
+// @import './element-plus/theme-chalk-purplewhite.scss';
+@import './element-plus/theme-chalk-redblack.scss';
+// @import './element-plus/theme-chalk-redwhite.scss';
+@import './element-plus/theme-chalk-blue.scss';
+@import './element-plus/theme-chalk-green.scss';
+@import './element-plus/theme-chalk-purple.scss';
+@import './element-plus/theme-chalk-red.scss';
+//遍历主题map
+@mixin themeify {
+  @each $theme-name, $theme-map in $themes {
+    //!global 把局部变量强升为全局变量
+    $theme-map: $theme-map !global;
+    //这步是判断html的data-theme的属性值  #{}是sass的插值表达式
+    //& sass嵌套里的父容器标识   @content是混合器插槽，像vue的slot
+    [data-theme='#{$theme-name}'] & {
+      @content;
+    }
+  }
+}
+//声明一个根据Key获取颜色的function
+@function themed($key) {
+  @return map-get($theme-map, $key);
+}
+
+//获取菜单背景颜色
+@mixin menu_background_color($color) {
+  @include themeify {
+    background-color: themed($color);
+  }
+}
+//获取菜单边框颜色
+@mixin menu_border_color($color) {
+  @include themeify {
+    border-color: themed($color);
+  }
+}
+// //获取字体颜色
+@mixin font_color($color) {
+  @include themeify {
+    color: themed($color);
+  }
+}
